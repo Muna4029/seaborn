@@ -200,10 +200,14 @@ class _LinePlotter(_RelationalPlotter):
 
     def __init__(
         self, *,
-        data=None, variables={},
+        data=None, variables=None,
         estimator=None, n_boot=None, seed=None, errorbar=None,
         sort=True, orient="x", err_style=None, err_kws=None, legend=None
     ):
+
+        # Guard against a mutable default for the variables mapping
+        if variables is None:
+            variables = {}
 
         # TODO this is messy, we want the mapping to be agnostic about
         # the kind of plot to draw, but for the time being we need to set
@@ -379,7 +383,11 @@ class _ScatterPlotter(_RelationalPlotter):
 
     _legend_attributes = ["color", "s", "marker"]
 
-    def __init__(self, *, data=None, variables={}, legend=None):
+    def __init__(self, *, data=None, variables=None, legend=None):
+
+        # Guard against a mutable default for the variables mapping
+        if variables is None:
+            variables = {}
 
         # TODO this is messy, we want the mapping to be agnostic about
         # the kind of plot to draw, but for the time being we need to set
@@ -732,7 +740,9 @@ def relplot(
     variables = dict(x=x, y=y, hue=hue, size=size, style=style)
     if kind == "line":
         variables["units"] = units
-        variables["weight"] = weights
+        # Use the plural "weights" key consistently so it matches the
+        # grid_variables and downstream assignment
+        variables["weights"] = weights
     else:
         if units is not None:
             msg = "The `units` parameter has no effect with kind='scatter'."
