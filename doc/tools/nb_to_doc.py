@@ -99,7 +99,7 @@ def strip_output(nb):
         for (extra, fields) in keys['cell'].items():
             if extra in cell:
                 for field in fields:
-                    pop_recursive(getattr(cell, extra), field)
+                    pop_recursive(cell[extra], field)
     return nb
 
 
